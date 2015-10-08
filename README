@@ -14,3 +14,11 @@ Build
 From a vsvarsall.bat shell (i.e. with compiler in the path):
 
   C:\...\nodoze>m.bat
+
+
+Example
+-------
+
+  C:\proj\stuff>nodoze my_long_running_command --something
+  ...
+  <computer doesn't sleep>

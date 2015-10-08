@@ -42,8 +42,10 @@ DWORD WINAPI KeyPresserThread(void*) {
 }
 
 int main() {
-  HANDLE thread =
-      CreateThread(nullptr, 0, &KeyPresserThread, nullptr, 0, nullptr);
+  if (!SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)) {
+    wprintf(L"nodoze: Could not SetThreadExecutionState\n");
+    exit(1);
+  }
 
   LPWSTR command = FindStartOfSubCommand(GetCommandLine());
 
@@ -73,7 +75,6 @@ int main() {
   DWORD exit_code;
   GetExitCodeProcess(process_info.hProcess, &exit_code);
   CloseHandle(process_info.hProcess);
-  CloseHandle(thread);
 
   return exit_code;
 }
