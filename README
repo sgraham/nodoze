@@ -1,0 +1,16 @@
+nodoze
+------
+
+Sort of like `caffeinate' on OS X. Runs a subcommand and prevents the computer
+from sleeping while it's running.
+
+Doesn't support any options or command line flags, everything after its name is
+the subcommand.
+
+
+Build
+-----
+
+From a vsvarsall.bat shell (i.e. with compiler in the path):
+
+  C:\...\nodoze>m.bat
