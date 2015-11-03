@@ -31,16 +31,6 @@ LPWSTR FindStartOfSubCommand(LPWSTR orig_command) {
   return ret;
 }
 
-DWORD WINAPI KeyPresserThread(void*) {
-  for (;;) {
-    keybd_event(VK_F24,
-                static_cast<BYTE>(MapVirtualKey(VK_F24, MAPVK_VK_TO_VSC)),
-                0,
-                0);
-    Sleep(59000);
-  }
-}
-
 int main() {
   if (!SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)) {
     wprintf(L"nodoze: Could not SetThreadExecutionState\n");
