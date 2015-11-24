@@ -32,7 +32,9 @@ LPWSTR FindStartOfSubCommand(LPWSTR orig_command) {
 }
 
 int main() {
-  if (!SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)) {
+  EXECUTION_STATE old_execution_state =
+      SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
+  if (!old_execution_state) {
     wprintf(L"nodoze: Could not SetThreadExecutionState\n");
     exit(1);
   }
@@ -65,6 +67,11 @@ int main() {
   DWORD exit_code;
   GetExitCodeProcess(process_info.hProcess, &exit_code);
   CloseHandle(process_info.hProcess);
+
+  if (!SetThreadExecutionState(old_execution_state)) {
+    wprintf(L"nodoze: Could not restore SetThreadExecutionState\n");
+    exit(1);
+  }
 
   return exit_code;
 }
