@@ -32,10 +32,27 @@ LPWSTR FindStartOfSubCommand(LPWSTR orig_command) {
 }
 
 int main() {
+  // This worked on XP-era, but doesn't seem to any more.
   EXECUTION_STATE old_execution_state =
       SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED);
   if (!old_execution_state) {
     wprintf(L"nodoze: Could not SetThreadExecutionState\n");
+    exit(1);
+  }
+
+  // I think this one is Win7+.
+  REASON_CONTEXT reason_context = {0};
+  reason_context.Version = POWER_REQUEST_CONTEXT_VERSION;
+  reason_context.Flags = POWER_REQUEST_CONTEXT_SIMPLE_STRING;
+  reason_context.Reason.SimpleReasonString = L"nodoze";
+  HANDLE power_request = PowerCreateRequest(&reason_context);
+  if (power_request == INVALID_HANDLE_VALUE) {
+    wprintf(L"nodoze: Could not PowerCreateRequest\n");
+    exit(1);
+  }
+
+  if (!PowerSetRequest(power_request, PowerRequestSystemRequired)) {
+    wprintf(L"nodoze: Could not PowerSetRequest\n");
     exit(1);
   }
 
